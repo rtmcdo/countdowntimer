@@ -1,126 +1,93 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Split Flap Display Countdown Timer</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
-<style>
-  .board {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: black;
-    color: white;
-  }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Flip Example Preset</title>
 
-  .flap {
-    perspective: 300px;
-    margin: 0 10px;
-  }
+        <link rel="stylesheet" href="../dist/flip.min.css" />
+    </head>
+    <body>
+        <!-- START OF FLIP EXAMPLE PRESET -->
 
-  .number {
-    width: 50px;
-    height: 100px;
-    position: relative;
-    transform-style: preserve-3d;
-  }
+        <style>
+            .tick {
+                padding-bottom: 1em;
+                font-size: 1rem;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans,
+                    Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+            }
 
-  .top, .bottom {
-    width: 100%;
-    height: 50%;
-    overflow: hidden;
-    position: absolute;
-  }
+            .tick-label {
+                font-size: 0.375em;
+                text-align: center;
+            }
 
-  .top {
-  top: 0;
-  background-color: #333;
-  transform-origin: bottom;
-  transition: transform 0.5s;
-}
+            .tick-group {
+                margin: 0 0.25em;
+                text-align: center;
+            }
+        </style>
 
-  .bottom {
-    bottom: 0;
-    background-color: #666;
-  }
+        <div class="tick" data-did-init="handleTickInit">
+            <div
+                data-repeat="true"
+                data-layout="horizontal center fit"
+                data-transform="preset(d, h, m, s) -> delay"
+            >
+                <div class="tick-group">
+                    <div
+                        data-key="value"
+                        data-repeat="true"
+                        data-transform="pad(00) -> split -> delay"
+                    >
+                        <span data-view="flip"></span>
+                    </div>
 
-  .content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
+                    <span data-key="label" data-view="text" class="tick-label"></span>
+                </div>
+            </div>
+        </div>
 
-  .top .content {
-    top: 0;
-  }
+        <script>
+            function handleTickInit(tick) {
+                // Uncomment to set labels to different language ( in this case Dutch )
+                /*
+        var locale = {
+            YEAR_PLURAL: 'Jaren',
+            YEAR_SINGULAR: 'Jaar',
+            MONTH_PLURAL: 'Maanden',
+            MONTH_SINGULAR: 'Maand',
+            WEEK_PLURAL: 'Weken',
+            WEEK_SINGULAR: 'Week',
+            DAY_PLURAL: 'Dagen',
+            DAY_SINGULAR: 'Dag',
+            HOUR_PLURAL: 'Uren',
+            HOUR_SINGULAR: 'Uur',
+            MINUTE_PLURAL: 'Minuten',
+            MINUTE_SINGULAR: 'Minuut',
+            SECOND_PLURAL: 'Seconden',
+            SECOND_SINGULAR: 'Seconde',
+            MILLISECOND_PLURAL: 'Milliseconden',
+            MILLISECOND_SINGULAR: 'Milliseconde'
+        };
 
-  .bottom .content {
-    top: -50%;
-  }
-</style>
-</head>
-<body>
-  <div id="timer" class="board">
-    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-  </div>
-  
-<script>
-  const countdown = Array.from(document.getElementById('timer').getElementsByClassName('number'));
+        for (var key in locale) {
+            if (!locale.hasOwnProperty(key)) { continue; }
+            tick.setConstant(key, locale[key]);
+        }
+        */
 
-  // Set the date we're counting down to
-  const countDownDate = new Date("June 16, 2024 23:59:59").getTime();
+                var nextYear = new Date().getFullYear() + 1;
 
-  function updateFlip(number, newValue) {
-    const top = number.querySelector('.top .content');
-    const bottom = number.querySelector('.bottom .content');
+                Tick.count.down(nextYear + '-01-01').onupdate = function (value) {
+                    tick.value = value;
+                };
+            }
+        </script>
 
-    // Animate the top half of the number
-    number.querySelector('.top').style.transform = 'rotateX(-90deg)';
+        <!-- END OF FLIP EXAMPLE PRESET -->
 
-    setTimeout(() => {
-      // Update the number
-      top.innerText = newValue;
-      bottom.innerText = newValue;
-
-      // Rotate the top half back in
-      number.querySelector('.top').style.transform = '';
-    }, 500);
-  }
-
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = countDownDate - now;
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // Update each flap with the corresponding value
-    updateFlip(countdown[0], Math.floor(days / 10));
-    updateFlip(countdown[1], days % 10);
-    updateFlip(countdown[2], Math.floor(hours / 10));
-    updateFlip(countdown[3], hours % 10);
-    updateFlip(countdown[4], Math.floor(minutes / 10));
-    updateFlip(countdown[5], minutes % 10);
-    updateFlip(countdown[6], Math.floor(seconds / 10));
-    updateFlip(countdown[7], seconds % 10);
-  }
-
-  setInterval(updateCountdown, 1000);
-</script>
-  </body>
-  </html>
+        <script src="../dist/flip.min.js"></script>
+    </body>
+</html>
