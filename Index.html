@@ -7,76 +7,120 @@
 <title>Split Flap Display Countdown Timer</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: 'Roboto Mono', monospace;
+  .board {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #333;
+    background-color: black;
     color: white;
   }
-  .board {
-    text-align: center;
-    background: black;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  }
+
   .flap {
-    display: inline-block;
-    margin: 0 5px;
-    position: relative;
-    overflow: hidden;
-    height: 80px;
-    width: 60px;
-    color: #f0f0f0;
+    perspective: 300px;
+    margin: 0 10px;
   }
+
   .number {
-    background-color: #000;
-    display: block;
-    padding: 10px;
-    font-size: 2em;
-    perspective: 100px;
+    width: 50px;
+    height: 100px;
+    position: relative;
+    transform-style: preserve-3d;
   }
+
   .top, .bottom {
-    position: absolute;
     width: 100%;
     height: 50%;
     overflow: hidden;
-  }
-  .top .content, .bottom .content {
-    display: block;
-    background: black;
-    padding: 10px 0;
-    transition: all 0.7s;
-  }
-  .bottom .content {
     position: absolute;
-    top: -50%;
   }
-  .flip .top .content {
-    transform: rotateX(-180deg);
+
+  .top {
+  top: 0;
+  background-color: #333;
+  transform-origin: bottom;
+  transition: transform 0.5s;
+}
+
+  .bottom {
+    bottom: 0;
+    background-color: #666;
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .top .content {
+    top: 0;
+  }
+
+  .bottom .content {
+    top: -50%;
   }
 </style>
 </head>
 <body>
-<div id="timer" class="board">
-  <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
-  <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div the="bottom"><span class="content">0</span></div></div></div>
-  <div class="flap"><div class="number"><div the="top"><span class="content">0</span></div><div the="bottom"><span the="content">0</span></div></div></div>
-  <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div the="bottom"><span the="content">0</span></div></div></div>
-  <div class="flap"><div class="number"><div the="top"><span class="content">0</span></div><div the="bottom"><span the="content">0</span></div></div></div>
-  <div class="flap"><div class="number"><div the="top"><span class="content">0</span></div><div the="bottom"><span the="content">0</span></div></div></div>
-  <div class="flap"><div class="number"><div the="top"><span the="content">0</span></div><div the="bottom"><span the="content">0</span></div></div></div>
-  <div class="flap"><div class="number"><div the="top"><span the="content">0</span></div><div the="bottom"><span the="content">0</span></div></div></div>
-</div>
-
+  <div id="timer" class="board">
+    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
+    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
+    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
+    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
+    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
+    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
+    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
+    <div class="flap"><div class="number"><div class="top"><span class="content">0</span></div><div class="bottom"><span class="content">0</span></div></div></div>
+  </div>
+  
 <script>
-  const countdown = document.getElementById('timer').getElementsByClassName('number');
+  const countdown = Array.from(document.getElementById('timer').getElementsByClassName('number'));
 
   // Set the date we're counting down to
-  const countDownDate = new Date("Dec 31, 2024 23:59:59").getTime();
+  const countDownDate = new Date("June 16, 2024 23:59:59").getTime();
 
   function updateFlip(number, newValue) {
-    const top = number.querySelector('.top .content
+    const top = number.querySelector('.top .content');
+    const bottom = number.querySelector('.bottom .content');
+
+    // Animate the top half of the number
+    number.querySelector('.top').style.transform = 'rotateX(-90deg)';
+
+    setTimeout(() => {
+      // Update the number
+      top.innerText = newValue;
+      bottom.innerText = newValue;
+
+      // Rotate the top half back in
+      number.querySelector('.top').style.transform = '';
+    }, 500);
+  }
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = countDownDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Update each flap with the corresponding value
+    updateFlip(countdown[0], Math.floor(days / 10));
+    updateFlip(countdown[1], days % 10);
+    updateFlip(countdown[2], Math.floor(hours / 10));
+    updateFlip(countdown[3], hours % 10);
+    updateFlip(countdown[4], Math.floor(minutes / 10));
+    updateFlip(countdown[5], minutes % 10);
+    updateFlip(countdown[6], Math.floor(seconds / 10));
+    updateFlip(countdown[7], seconds % 10);
+  }
+
+  setInterval(updateCountdown, 1000);
+</script>
+  </body>
+  </html>
