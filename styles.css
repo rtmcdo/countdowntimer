@@ -1,0 +1,54 @@
+.countdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.time-section {
+  text-align: center;
+  margin: 0 10px;
+}
+
+.time-group {
+  display: flex;
+  justify-content: center;
+}
+
+.flip-card {
+  position: relative;
+  width: 50px;
+  height: 80px;
+  perspective: 1000px;
+  margin: 0 5px;
+}
+
+.top, .bottom {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  line-height: 80px;
+  font-size: 48px;
+  font-weight: bold;
+  backface-visibility: hidden;
+  transition: transform 0.6s;
+}
+
+.top {
+  background-color: #333;
+  color: #fff;
+  transform-origin: bottom;
+}
+
+.bottom {
+  background-color: #f0f0f0;
+  color: #333;
+  transform-origin: top;
+  transform: rotateX(180deg);
+}
+
+.label {
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
